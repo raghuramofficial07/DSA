@@ -308,4 +308,4 @@ def maxDepth(self, root: 'Node') -> int:
 
 ---
 
-*Notes by Claude • LeetCode Problem 104*
+*Notes by VSR • LeetCode Problem 104*
