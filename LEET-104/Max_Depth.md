@@ -1,3 +1,20 @@
+<div align="center">
+
+<img width="841" alt="Screenshot 2025-06-22 at 10 51 31 AM" src="https://github.com/user-attachments/assets/501c98ee-809c-4376-b32d-6d38ae07c489" />
+
+
+<br/>
+
+![Trees](https://img.shields.io/badge/Trees-0d1117?style=for-the-badge&logoColor=58a6ff&labelColor=161b22&color=161b22)
+![Graphs](https://img.shields.io/badge/Graphs-0d1117?style=for-the-badge&logoColor=58a6ff&labelColor=161b22&color=161b22)
+![DP](https://img.shields.io/badge/Dynamic%20Programming-0d1117?style=for-the-badge&labelColor=161b22&color=161b22)
+![Recursion](https://img.shields.io/badge/Recursion-0d1117?style=for-the-badge&labelColor=161b22&color=161b22)
+![Sorting](https://img.shields.io/badge/Sorting-0d1117?style=for-the-badge&labelColor=161b22&color=161b22)
+
+</div>
+
+---
+
 # 🌳 LeetCode 104 — Maximum Depth of Binary Tree
 
 > **Difficulty:** Easy | **Topic:** Tree, DFS, BFS, Recursion
@@ -34,6 +51,32 @@ Each node answers:
 > *"I'll ask my left and right children, take the bigger answer, and add 1 for myself."*
 
 Base case: An empty node (`null`) has depth **0**.
+
+---
+
+## 💡 My Mental Model — How Recursion Actually Works Here
+
+**The recursion dives to the bottom first.**
+The function doesn't compute anything on the way *down* — it just keeps calling itself deeper and deeper until it hits `null`. Only then does the real work begin.
+
+**The `+1` is added on the way *back up*, not on the way down.**
+When the deepest call hits `null` and returns `0`, the call just above it receives that `0`, adds `+1` for itself, and returns `1` to *its* caller. This bubbles all the way back up to the root — each returning frame adds `+1` for the node it represents.
+
+**The call stack IS the memory.**
+There's no external variable tracking the depth. Instead, each recursive call *lives on the call stack* and holds its own partial result. Because the stack follows **LIFO (Last In, First Out)**, the deepest call resolves first and hands its result back to the frame below it. The function essentially uses its own stack frames as storage — the "memory" is the recursion itself.
+
+**`max()` acts as the running tracker.**
+At every node, `max(left, right)` picks the deeper side. This comparison gets returned upward, so the largest depth discovered at the bottom continuously propagates back as the current best answer — carried forward through each `return` up the chain until it reaches the root.
+
+**In short:**
+```
+DOWN  → traverse to the bottom (no computation, just diving)
+UP    → unwind the stack, adding +1 at each level (LIFO order)
+max() → at each step, keep only the deeper side
+root  → receives the final accumulated depth as the answer
+```
+
+> Think of it like dropping a measuring tape to the floor — you only read the number *after* it hits the bottom and you pull it back up.
 
 ---
 
@@ -265,4 +308,4 @@ def maxDepth(self, root: 'Node') -> int:
 
 ---
 
-*Notes by VSR • LeetCode Problem 104*
+*Notes by Claude • LeetCode Problem 104*
