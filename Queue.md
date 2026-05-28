@@ -373,6 +373,122 @@ print(maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3))
 ```
 
 ---
+```md
+> [!NOTE]
+> ## Queue Understanding — Q & A
+
+### Q. What is Queue class?
+
+A. Queue is a blueprint/template used to create queue objects.
+
+---
+
+### Q. What does `const q = new Queue()` do?
+
+A. It creates the actual queue object from the Queue class.
+
+---
+
+### Q. What does `this` refer to?
+
+A. `this` refers to the current object using the method.
+
+---
+
+### Q. In `q.dequeue()`, what is `this`?
+
+A. JavaScript automatically makes:
+
+```js
+this = q
+```
+
+---
+
+### Q. What is `data`?
+
+A. `data` is the storage structure acting like an array.
+
+```js
+{
+  0: 10,
+  1: 20,
+  2: 30
+}
+```
+
+---
+
+### Q. What is `head`?
+
+A. `head` is a moving pointer/index pointing to the current front element.
+
+---
+
+### Q. Is `head` the actual value?
+
+A. No. It only stores the position/index of the front element.
+
+---
+
+### Q. What does `this.data[this.head]` mean?
+
+A. It means:
+
+```txt
+Go to data storage
+↓
+Use head as index
+↓
+Get value at that position
+```
+
+---
+
+### Q. Example?
+
+```js
+head = 0
+
+data = {
+  0:10,
+  1:20,
+  2:30
+}
+
+data[head]
+↓
+data[0]
+↓
+10
+```
+
+---
+
+### Q. What does `delete this.data[this.head]` do?
+
+A. It removes the current front item from storage.
+
+---
+
+### Q. What does `this.head++` do?
+
+A. It moves the pointer to the next element.
+
+---
+
+### Q. How does `head` behave internally?
+
+A. `head` traverses through the structure like an array pointer/cursor,
+similar to traversal in linear search.
+
+---
+
+### Q. Why is this queue efficient?
+
+A. Because elements are not shifted. Only the pointer moves forward.
+
+---
 
 <div align="center">
 
