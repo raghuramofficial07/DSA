@@ -106,6 +106,47 @@ ts.headSet(30);      // [10, 20] (elements < 30)
 ts.tailSet(30);      // [30, 40] (elements >= 30)
 ```
 
+### `pollFirst()` and `pollLast()` — read-and-remove
+
+These are the two methods most people miss. Unlike `first()`/`last()`, which only **read** the min/max and throw `NoSuchElementException` on an empty set, `pollFirst()`/`pollLast()` **read AND remove** the min/max in one atomic call, and return `null` instead of throwing if the set is empty.
+
+| Method | Action | Empty-set behavior |
+|---|---|---|
+| `first()` | Peek smallest, no removal | Throws `NoSuchElementException` |
+| `last()` | Peek largest, no removal | Throws `NoSuchElementException` |
+| `pollFirst()` | Remove & return smallest | Returns `null` |
+| `pollLast()` | Remove & return largest | Returns `null` |
+
+```java
+TreeSet<Integer> ts = new TreeSet<>(List.of(30, 10, 40, 20));
+
+Integer min = ts.pollFirst(); // 10, set becomes [20, 30, 40]
+Integer max = ts.pollLast();  // 40, set becomes [20, 30]
+
+TreeSet<Integer> empty = new TreeSet<>();
+System.out.println(empty.pollFirst()); // null — no exception thrown
+```
+
+**Why they're useful:**
+- **Draining a sorted set in order** — repeatedly calling `pollFirst()` in a loop gives you elements in ascending order while emptying the set, without needing a separate iterator + remove call.
+  ```java
+  while (!ts.isEmpty()) {
+      System.out.println(ts.pollFirst()); // prints in ascending order, one at a time
+  }
+  ```
+- **Min/Max-based greedy algorithms** — e.g., repeatedly pairing the smallest and largest remaining elements (a common interview pattern: "pair up elements to minimize/maximize some cost").
+  ```java
+  while (ts.size() > 1) {
+      int smallest = ts.pollFirst();
+      int largest = ts.pollLast();
+      // process the pair...
+  }
+  ```
+- **Simulating a min-heap / max-heap with duplicate removal** — `PriorityQueue` doesn't dedupe, but if you also need uniqueness, `TreeSet` + `pollFirst()`/`pollLast()` gives you a sorted, duplicate-free structure with heap-like pop behavior. (Trade-off: O(log n) like a heap, but with the added uniqueness guarantee `PriorityQueue` lacks.)
+- **Null-safe draining** — since these return `null` on empty instead of throwing, they're natural for `while ((x = ts.pollFirst()) != null)` style loops without needing a try/catch or an `isEmpty()` check first.
+
+**STL comparison:** C++'s `std::set` has no single combined "pop" method either — you'd write `auto it = s.begin(); int val = *it; s.erase(it);` to get the same read-and-remove effect. Java's `pollFirst()`/`pollLast()` are effectively that same pattern wrapped into one atomic call — a small but genuinely convenient improvement over STL here.
+
 ---
 
 ## 5. Why `Set` Is Useful
